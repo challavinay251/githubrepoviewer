@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Repo Viewer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            padding: 1em;
+            text-align: center;
+        }
+
+        .profile-container {
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center; /* Center vertically */
+        }
+
+        .profile-image {
+            max-width: 200px; /* Decrease the max-width to 80px or adjust as needed */
+            border-radius: 50%;
+            margin-right: 20px;
+        }
+
+        .profile-info {
+            flex-grow: 1; /* Allow the info to grow to take remaining space */
+        }
+
+        .repo-container {
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 5px;
+        }
+
+        .repo {
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .repo h3 {
+            margin-bottom: 5px;
+            color: blue; /* Set the color to blue */
+        }
+
+        .repo p {
+            margin: 0;
+        }
+
+        .pagination {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .pagination a {
+            display: inline-block;
+            padding: 8px 16px;
+            text-decoration: none;
+            background-color: #f4f4f4;
+            color: #333;
+            border-radius: 5px;
+            margin: 0 5px;
+            cursor: pointer;
+        }
+
+        .pagination a.active {
+            background-color: #333;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>GitHub Repo Viewer</h1>
+    </header>
+
+    <div class="profile-container">
+        <!-- Add Octocat image as a default profile photo -->
+        <img src="https://github.com/octocat.png" alt="Octocat" class="profile-image">
+    
+        <div class="profile-info">
+            <h2>CHALLA VINAY</h2>
+            <!-- Move the GitHub link here -->
+            <p><a href="https://github.com/challavinay251" target="_blank">https://github.com/challavinay251</a></p>
+            <p><strong>Username:</strong> <a href="https://github.com/challavinay251" target="_blank">challavinay251</a></p>
+            <p><strong>     📍:</strong>Hyderabad , India</p> <!-- Replaced "Location" with a map pin emoji -->
+            <p><strong>Repositories:</strong> 3</p>
+            <p><strong>Member since:</strong> January 2024</p><br>
+            <p><strong>linkedin:</strong> <a href="https://www.linkedin.com/in/vinay-challa-2a1421243/" target="_blank">challavinay251</a></p>
+            
+        </div>
+    </div>
+    
+    <div class="repo-container">
+        <h2>Your GitHub Repositories</h2>
+        <div id="repos"></div>
+        
+        <!-- Pagination section -->
+        <div class="pagination" id="pagination"></div>
+    </div>
+
+    <script>
+        // Sample repositories
+        const sampleRepos = [
+            {
+                name: 'sample-repo-1',
+                description: 'This is the first sample repository.',
+                language: 'JavaScript',
+                
+            },
+            {
+                name: 'sample-repo-2',
+                description: 'A second sample repository for testing.',
+                language: 'Python',
+                
+            },
+            {
+                name: 'sample-repo-3',
+                description: 'Another sample repository with no specified language.',
+                
+            }
+        ];
+
+        // Display sample repositories
+        const reposContainer = document.getElementById('repos');
+        const paginationContainer = document.getElementById('pagination');
+        const itemsPerPage = 2; // Adjust as needed
+        const totalPages = Math.ceil(sampleRepos.length / itemsPerPage);
+
+        function displayRepos(page) {
+            reposContainer.innerHTML = ''; // Clear existing content
+
+            const startIndex = (page - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const displayedRepos = sampleRepos.slice(startIndex, endIndex);
+
+            displayedRepos.forEach(repo => {
+                const repoElement = document.createElement('div');
+                repoElement.classList.add('repo');
+
+                repoElement.innerHTML = `
+                    <h3>${repo.name}</h3>
+                    <p>${repo.description || 'No description available'}</p>
+                    <p>Language: ${repo.language || 'Not specified'}</p>
+                    
+                `;
+
+                reposContainer.appendChild(repoElement);
+            });
+        }
+
+        function displayPagination() {
+            paginationContainer.innerHTML = ''; // Clear existing pagination
+
+            for (let i = 1; i <= totalPages; i++) {
+                const pageLink = document.createElement('a');
+                pageLink.href = '#';
+                pageLink.textContent = i;
+
+                pageLink.addEventListener('click', function() {
+                    displayRepos(i);
+                    updateActivePage(i);
+                });
+
+                paginationContainer.appendChild(pageLink);
+            }
+
+            // Display the first page by default
+            displayRepos(1);
+            updateActivePage(1);
+        }
+
+        function updateActivePage(activePage) {
+            const allPageLinks = document.querySelectorAll('.pagination a');
+            allPageLinks.forEach(link => {
+                link.classList.remove('active');
+            });
+
+            const activePageLink = document.querySelector(`.pagination a:nth-child(${activePage})`);
+            if (activePageLink) {
+                activePageLink.classList.add('active');
+            }
+        }
+
+        // Initialize pagination
+        displayPagination();
+    </script>
+</body>
+</html>
